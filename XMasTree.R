@@ -48,8 +48,16 @@ draw <- function(depth, length, id=0)
 }
 
 size <- 10
-depth <- 9
+depth <- 10
 draw(depth, size)
+
+xmaschard <- data.table( x0 = c(-10, -5, 5, 10, -7, 7),
+                         y0 = c(1, 2, 2, 1, 30, 30),
+                         x1=0, y1=0, depth=0, id=0,
+                         size = c(5, 5, 5, 5, 7, 7),
+                         label=c("Jos", "Tjitske", "Tjippie", "Otto",
+                                 "Een goed",
+                                 "2021"))
 
 plotdata <- as.data.table(t(as.data.table(segments)))
 setnames(plotdata, c("x0","y0","x1","y1","depth","id"))
@@ -58,8 +66,10 @@ plt <- ggplot(plotdata, aes(x=x0,y=y0,xend=x1,yend=y1)) +
   geom_segment(aes(color=depth,size=I(depth/4)))+
   scale_color_gradient(low="lightgreen",high=scales::muted("green"),guide=F)+
   coord_fixed(ratio=1)+
-  geom_point(data = plotdata[id<=1], color="red",size=0.2)+
-  geom_point(data = data.frame(x0=0,y0=max(plotdata$y0),x1=0,y1=0),color="yellow",size=3)+
+  geom_point(data = plotdata[id<1], color="red",size=0.2)+
+  geom_point(data = data.frame(x0=0,y0=max(plotdata$y0),x1=0,y1=0),color="gold",size=3)+
+  geom_text(data=xmaschard, mapping=aes(label=label,size=I(size)), color="gold",
+            family="Times", fontface="italic")+
   #geom_text(aes(x=(x0+x1)/2,y=(y0+y1)/2,label=i))+
   #geom_label(data = data.table(x0=mean(plotdata$x0),y0=mean(plotdata$y0),x1=0,y1=0), 
   #           mapping=aes(label=paste("Depth",depth)))+
